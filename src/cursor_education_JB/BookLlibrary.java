@@ -10,7 +10,7 @@ public class BookLlibrary {
     public static void main(String[] args) {
         // write your code here
 
-
+/*
         // Створив книги: інвентарний номер, назва книги, автор книги, рік випуску книги.
         Book book1 = new Book(1, "Clean Code: A Handbook of Agile Software Craftsmznship", "Robert C. Martin", 2010);
         Book book2 = new Book(2, "Effective Java Programming Language Guide", "Joshua Bloch", 2014);
@@ -66,29 +66,31 @@ public class BookLlibrary {
         cardIndex3.put(libraryReader3, cardBooks3);
 
         //Список карток читачів і книги які вони взяли.
-        ArrayList<Map> basicCardIndex1 = new ArrayList<>();
+        ArrayList<Map<LibraryReader, ArrayList<Book>>> basicCardIndex1 = new ArrayList<>();
         basicCardIndex1.add(cardIndex1);
         basicCardIndex1.add(cardIndex3);
         basicCardIndex1.add(cardIndex2);
-        ArrayList<Map> basicCardIndex2 = new ArrayList<>();
+        ArrayList<Map<LibraryReader, ArrayList<Book>>> basicCardIndex2 = new ArrayList<>();
         basicCardIndex2.add(cardIndex2);
-        ArrayList<Map> basicCardIndex3 = new ArrayList<>();
+        ArrayList<Map<LibraryReader, ArrayList<Book>>> basicCardIndex3 = new ArrayList<>();
         basicCardIndex3.add(cardIndex3);
 
         //Картка бібліотеки по книгам які були виданні читачам.
-        Map<LocalDate, ArrayList> cardIndexLibrary = new HashMap<>();
+        Map<LocalDate, ArrayList<Map<LibraryReader, ArrayList<Book>>>> cardIndexLibrary = new HashMap<>();
         cardIndexLibrary.put(LocalDate.of(2021, 12, 01), basicCardIndex1);
         cardIndexLibrary.put(LocalDate.of(2021, 12, 10), basicCardIndex2);
         cardIndexLibrary.put(LocalDate.of(2021, 12, 14), basicCardIndex3);
+*/
 
+
+        Map<LocalDate, ArrayList<Map<LibraryReader, ArrayList<Book>>>> cardIndexLibrary = DownloadLibrary();
         //Пошук виданих книг за вказаний день.
-        LocalDate searchDate = LocalDate.of(2012, 12, 01);
-        System.out.println(searchDate + " : ");
+        LocalDate searchDate = LocalDate.of(2021, 12, 01);
+        System.out.println("Book date - "+searchDate + " : ");
         if (cardIndexLibrary.containsKey(searchDate)) {
-            ArrayList<Map> searchBook1 = cardIndexLibrary.get(searchDate);
+            ArrayList<Map<LibraryReader, ArrayList<Book>>> searchBook1 = cardIndexLibrary.get(searchDate);
             for (int i = 0; i < searchBook1.size(); i++) {
-                Map<LibraryReader, ArrayList<Book>> searchСardIndex = new HashMap<>();
-                searchСardIndex = searchBook1.get(i);
+                Map<LibraryReader, ArrayList<Book>> searchСardIndex = searchBook1.get(i);
                 for (Map.Entry<LibraryReader, ArrayList<Book>> entry : searchСardIndex.entrySet()) {
                     ArrayList<Book> searchCardBooks;
                     searchCardBooks = entry.getValue();
@@ -104,18 +106,15 @@ public class BookLlibrary {
         //Виведення книг взятих в певний період  часу
         LocalDate searchDate1 = LocalDate.of(2021, 12, 01);
         LocalDate searchDate2 = LocalDate.of(2021, 12, 31);
-        System.out.println(searchDate1 + " - " + searchDate2);
-
-
+        System.out.println("Book - "+searchDate1 + " - " + searchDate2);
         searchDate2 = searchDate2.plusDays(1);
         int countBook = 0;
         while (!searchDate2.equals(searchDate1)) {
             System.out.print(searchDate1 + " : ");
             if (cardIndexLibrary.containsKey(searchDate1)) {
-                ArrayList<Map> searchBook1 = cardIndexLibrary.get(searchDate1);
+                ArrayList<Map<LibraryReader, ArrayList<Book>>> searchBook1 = cardIndexLibrary.get(searchDate1);
                 for (int i = 0; i < searchBook1.size(); i++) {
-                    Map<LibraryReader, ArrayList<Book>> searchСardIndex = new HashMap<>();
-                    searchСardIndex = searchBook1.get(i);
+                    Map<LibraryReader, ArrayList<Book>> searchСardIndex = searchBook1.get(i);
                     for (Map.Entry<LibraryReader, ArrayList<Book>> entry : searchСardIndex.entrySet()) {
                         ArrayList<Book> searchCardBooks;
                         searchCardBooks = entry.getValue();
@@ -133,6 +132,29 @@ public class BookLlibrary {
             searchDate1 = searchDate1.plusDays(1);
         }
 
+        // Виведення дат коли брали книги
+        System.out.println("Range of dates of taken books: ");
+        for (Map.Entry entry : cardIndexLibrary.entrySet()) {
+            System.out.println(entry.getKey());
+        }
+
+        // Виведення книги які видані
+        System.out.println("Book:");
+        for (Map.Entry entry : cardIndexLibrary.entrySet()) {
+            ArrayList<Map> searchBook3 = (ArrayList<Map>) entry.getValue();
+            for (int i = 0; i < searchBook3.size(); i++) {
+                Map<LibraryReader, ArrayList<Book>> searchСardIndex = new HashMap<>();
+                searchСardIndex = searchBook3.get(i);
+                for (Map.Entry<LibraryReader, ArrayList<Book>> entry2 : searchСardIndex.entrySet()) {
+                    ArrayList<Book> searchCardBooks;
+                    searchCardBooks = entry2.getValue();
+                    for (int j = 0; j < searchCardBooks.size(); j++) {
+                        System.out.println(searchCardBooks.get(j));
+                    }
+                }
+            }
+
+        }
 
     }
 }
